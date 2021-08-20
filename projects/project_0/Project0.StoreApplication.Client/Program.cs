@@ -41,3 +41,4 @@ namespace Project0.StoreApplication.Client
     }
   }
 }
+
