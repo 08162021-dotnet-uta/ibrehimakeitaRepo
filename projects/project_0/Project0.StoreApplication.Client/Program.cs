@@ -9,6 +9,7 @@ namespace Project0.StoreApplication.Client
   {
     static void Main(string[] args)
     {
+      long.Logger = new LogggerConfiguration().
       var p = new Program();
 
       p.PrintAllStoreLocations();

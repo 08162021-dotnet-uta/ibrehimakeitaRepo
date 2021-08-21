@@ -14,7 +14,8 @@ namespace Project0.StoreApplication.Testing
       var actual = sut.Stores;
       //assert
       Assert.NotNull(actual);
-    }
-  }
 
+    }
+
+  }
 }
