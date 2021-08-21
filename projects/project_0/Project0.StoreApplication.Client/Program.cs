@@ -9,12 +9,20 @@ namespace Project0.StoreApplication.Client
   {
     static void Main(string[] args)
     {
-      long.Logger = new LogggerConfiguration().
+
       var p = new Program();
 
       p.PrintAllStoreLocations();
 
+
       System.Console.WriteLine(p.SelectAStore());
+      // p.SelectAStore();
+      // 
+
+      //p.SelectAproduct();
+      p.PrintProductList();
+      System.Console.WriteLine(p.SelectAproduct());
+      //p.SelectAproduct();
     }
 
     void PrintAllStoreLocations()
@@ -27,6 +35,9 @@ namespace Project0.StoreApplication.Client
         System.Console.WriteLine(i + " - " + store);
         i += 1;
       }
+      // Print product list 
+
+
     }
 
     Store SelectAStore()
@@ -39,6 +50,30 @@ namespace Project0.StoreApplication.Client
       var store = sr[option - 1];
 
       return store;
+    }
+    // Print product List
+    void PrintProductList()
+    {
+      var productRepository = new ProductRepository();
+      int i = 1;
+
+      foreach (var product in productRepository.Product)
+      {
+        System.Console.WriteLine(i + " - " + product);
+        i += 1;
+      }
+    }
+    // Let customer choose their products
+    Products SelectAproduct()
+    {
+      var pdt = new ProductRepository().Product;
+      Console.WriteLine("Select a product: ");
+
+      var option = int.Parse(Console.ReadLine());
+      var product = pdt[option - 1];
+      return product;
+
+
     }
   }
 }

@@ -1,7 +1,14 @@
+using System;
+
 namespace Project0.StoreApplication.Domain.Models
 {
-  class Product
+  public class Products
   {
+    public string Name { get; set; }
 
+    public override string ToString()
+    {
+      return Name ?? DateTime.Now.ToLongDateString();
+    }
   }
 }
