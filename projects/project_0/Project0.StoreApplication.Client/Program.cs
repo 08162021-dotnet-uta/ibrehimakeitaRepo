@@ -1,80 +1,98 @@
-﻿using System;
+﻿// procedural programming - DONE
+// functional programming lite - DONE
+// object-oriented programming - DONE
+// unit testing - DONE
+// generics - DONE
+// design patterns: singleton - DONE
+// structure: SOLID - DONE
+// serialization - DONE
+// monitoring - DONE
+// debugging - DONE
+
+using System;
 using System.Collections.Generic;
+using Project0.StoreApplication.Client.Singletons;
+using Project0.StoreApplication.Domain.Abstracts;
 using Project0.StoreApplication.Domain.Models;
 using Project0.StoreApplication.Storage.Repositories;
+using Serilog;
 
 namespace Project0.StoreApplication.Client
 {
-  class Program
+  /// <summary>
+  /// Defines the Program Class
+  /// </summary>
+  internal class Program
   {
-    static void Main(string[] args)
+    private static readonly CustomerSingleton _customerSingleton = CustomerSingleton.Instance;
+    private static readonly StoreSingleton _storeSingleton = StoreSingleton.Instance;
+    private const string _logFilePath = @"/home/ibrehima/revature/ibrehima_repo/data/logs.txt";
+
+    /// <summary>
+    /// Defines the Main Method
+    /// </summary>
+    /// <param name="args"></param>
+    private static void Main(string[] args)
     {
+      Log.Logger = new LoggerConfiguration().WriteTo.File(_logFilePath).CreateLogger();
 
-      var p = new Program();
-
-      p.PrintAllStoreLocations();
-
-
-      System.Console.WriteLine(p.SelectAStore());
-      // p.SelectAStore();
-      // 
-
-      //p.SelectAproduct();
-      p.PrintProductList();
-      System.Console.WriteLine(p.SelectAproduct());
-      //p.SelectAproduct();
+      Run();
     }
 
-    void PrintAllStoreLocations()
+    /// <summary>
+    /// 
+    /// </summary>
+    private static void Run()
     {
-      var storeRepository = new StoreRepository();
-      int i = 1;
+      Log.Information("method: Run()");
 
-      foreach (var store in storeRepository.Stores)
+      if (_customerSingleton.Customers.Count != 0)
       {
-        System.Console.WriteLine(i + " - " + store);
-        i += 1;
       }
-      // Print product list 
-
-
-    }
-
-    Store SelectAStore()
-    {
-      var sr = new StoreRepository().Stores;
-
-      Console.WriteLine("Select a Store: ");
-
-      var option = int.Parse(Console.ReadLine());
-      var store = sr[option - 1];
-
-      return store;
-    }
-    // Print product List
-    void PrintProductList()
-    {
-      var productRepository = new ProductRepository();
-      int i = 1;
-
-      foreach (var product in productRepository.Product)
+      else
       {
-        System.Console.WriteLine(i + " - " + product);
-        i += 1;
+        _customerSingleton.Add(new Customer());
+      }
+
+      var customer = _customerSingleton.Customers[Capture<Customer>(_customerSingleton.Customers)];
+      var store = _storeSingleton.Stores[Capture<Store>(_storeSingleton.Stores)];
+      // stores
+      //Output<Store>(_storeSingleton.Stores);
+      // products
+      //Output<Product>(_productSingleton.Products);
+
+      Console.WriteLine(customer);
+    }
+
+    /// <summary>
+    /// 
+    /// </summary>
+    private static void Output<T>(List<T> data) where T : class
+    {
+      Log.Information($"method: Output<{typeof(T)}>()");
+
+      var index = 0;
+
+      foreach (var item in data)
+      {
+        Console.WriteLine($"[{++index}] - {item}");
       }
     }
-    // Let customer choose their products
-    Products SelectAproduct()
+
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <returns></returns>
+    private static int Capture<T>(List<T> data) where T : class
     {
-      var pdt = new ProductRepository().Product;
-      Console.WriteLine("Select a product: ");
+      Log.Information("method: Capture()");
 
-      var option = int.Parse(Console.ReadLine());
-      var product = pdt[option - 1];
-      return product;
+      Output<T>(data);
+      Console.Write("make selection: ");
 
+      int selected = int.Parse(Console.ReadLine());
 
+      return selected - 1;
     }
   }
 }
-
